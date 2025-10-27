@@ -1,13 +1,13 @@
-import { Bell, User } from "lucide-react";
+import { Bell } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 
 const Dashboard = () => {
-  const userName = "Vitória";
+  const userName = "vitória";
   const userFullName = "Vitor Rocha";
-  const userMatricula = "Matrícula: 028366";
+  const userMatricula = "025266";
   const userRole = "Administrador";
 
   const topics = [
@@ -41,23 +41,23 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-card border-b">
-        <div className="container max-w-md mx-auto px-4 py-4">
-          <div className="flex items-start justify-between">
+      <header className="bg-background pt-6">
+        <div className="container max-w-md mx-auto px-5">
+          <div className="flex items-start justify-between mb-6">
             <div className="flex gap-3">
-              <Avatar className="w-12 h-12">
+              <Avatar className="w-16 h-16 border-2 border-border">
                 <AvatarImage src="/placeholder.svg" alt={userFullName} />
-                <AvatarFallback>VR</AvatarFallback>
+                <AvatarFallback className="text-lg">VR</AvatarFallback>
               </Avatar>
-              <div>
-                <h2 className="font-semibold text-foreground">{userFullName}</h2>
-                <p className="text-xs text-muted-foreground">{userMatricula}</p>
-                <Badge variant="secondary" className="mt-1 text-xs bg-emerald-100 text-emerald-700 hover:bg-emerald-100">
+              <div className="pt-1">
+                <h2 className="font-semibold text-foreground text-base">{userFullName}</h2>
+                <p className="text-sm text-muted-foreground">Matrícula: {userMatricula}</p>
+                <Badge variant="secondary" className="mt-1.5 text-xs bg-emerald-100 text-emerald-700 hover:bg-emerald-100 font-normal">
                   Cargo: {userRole}
                 </Badge>
               </div>
             </div>
-            <Button variant="ghost" size="icon" className="rounded-full">
+            <Button variant="ghost" size="icon" className="rounded-xl border border-border mt-1">
               <Bell className="h-5 w-5" />
             </Button>
           </div>
@@ -65,35 +65,37 @@ const Dashboard = () => {
       </header>
 
       {/* Main Content */}
-      <main className="container max-w-md mx-auto px-4 py-6">
+      <main className="container max-w-md mx-auto px-5">
         {/* Welcome Message */}
-        <h1 className="text-xl font-medium text-foreground mb-4">
+        <h1 className="text-2xl font-normal text-foreground mb-5">
           Bem vinda de volta {userName}, 👋
         </h1>
 
         {/* Featured Card */}
-        <Card className="mb-6 bg-primary text-primary-foreground border-0 overflow-hidden">
-          <CardContent className="p-6 relative">
-            <Badge className="mb-2 bg-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/20">
-              DESTAQUE
-            </Badge>
-            <h3 className="text-lg font-semibold mb-2">
-              Centralize<br />seus atendimentos.
-            </h3>
-            <p className="text-sm text-primary-foreground/90 mb-4 max-w-[70%]">
-              A AVAL centraliza seus atendimentos em apenas um só lugar, facilitando simulações que melhoram seu atendimento real!
-            </p>
-            <div className="absolute right-4 bottom-4 w-24 h-24 opacity-80">
-              <div className="w-full h-full bg-yellow-400 rounded-full flex items-center justify-center">
-                <User className="w-12 h-12 text-gray-800" />
+        <Card className="mb-6 bg-primary/90 text-primary-foreground border-0 overflow-hidden rounded-2xl">
+          <CardContent className="p-5 relative min-h-[180px]">
+            <div className="absolute top-3 left-3 text-[10px] text-primary-foreground/70 font-medium">
+              CEUMA<br />UNIVERSIDADE
+            </div>
+            <div className="relative z-10 pt-8">
+              <h3 className="text-xl font-semibold mb-2 leading-tight text-primary-foreground/95">
+                Centralize<br />seus atendimentos.
+              </h3>
+              <p className="text-xs text-primary-foreground/80 max-w-[65%] leading-relaxed">
+                O AVAL centraliza seus atendimentos presenciais e transforma cada feedback em dados que melhoram sua operação em tempo real.
+              </p>
+            </div>
+            <div className="absolute right-2 bottom-2 w-32 h-32">
+              <div className="w-full h-full flex items-end justify-end">
+                <div className="text-6xl">💁‍♀️</div>
               </div>
             </div>
           </CardContent>
         </Card>
 
         {/* Topics Section */}
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold text-foreground mb-4">Tópicos</h2>
+        <div className="mb-8">
+          <h2 className="text-xl font-normal text-foreground mb-4">Tópicos</h2>
           <div className="grid grid-cols-2 gap-4">
             {topics.map((topic) => (
               <Card key={topic.title} className={`${topic.color} border-0`}>
