@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const loginSchema = z.object({
   matricula: z.string().min(3, "Matrícula inválida").max(50),
@@ -17,6 +17,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 const Login = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
   
   const {
     register,
@@ -33,6 +34,7 @@ const Login = () => {
       await new Promise((resolve) => setTimeout(resolve, 1500));
       console.log("Dados do login:", data);
       toast.success("Login realizado com sucesso!");
+      navigate("/dashboard");
     } catch (error) {
       toast.error("Erro ao realizar login. Verifique suas credenciais.");
     } finally {

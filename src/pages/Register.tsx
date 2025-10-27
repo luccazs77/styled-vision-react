@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const registerSchema = z.object({
   nome: z.string().min(3, "Nome deve ter no mínimo 3 caracteres").max(100),
@@ -30,6 +30,7 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 
 const Register = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
   
   const {
     register,
@@ -47,6 +48,7 @@ const Register = () => {
       await new Promise((resolve) => setTimeout(resolve, 1500));
       console.log("Dados do cadastro:", data);
       toast.success("Cadastro realizado com sucesso!");
+      navigate("/dashboard");
     } catch (error) {
       toast.error("Erro ao realizar cadastro. Tente novamente.");
     } finally {
