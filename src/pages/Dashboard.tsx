@@ -1,10 +1,12 @@
-import { Bell } from "lucide-react";
+import { Bell, ArrowLeft } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const userName = "vitória";
   const userFullName = "Vitor Rocha";
   const userMatricula = "025266";
@@ -43,6 +45,14 @@ const Dashboard = () => {
       {/* Header */}
       <header className="bg-background pt-6">
         <div className="container max-w-md mx-auto px-5">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={() => navigate("/login")}
+            className="mb-4"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
           <div className="flex items-start justify-between mb-6">
             <div className="flex gap-3">
               <Avatar className="w-16 h-16 border-2 border-border">
