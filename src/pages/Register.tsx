@@ -1,198 +1,137 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
-
-const registerSchema = z.object({
-  nome: z.string().min(3, "Nome deve ter no mínimo 3 caracteres").max(100),
-  matricula: z.string().min(3, "Matrícula inválida").max(50),
-  senha: z.string().min(6, "Senha deve ter no mínimo 6 caracteres").max(100),
-  confirmarSenha: z.string().min(6, "Senha deve ter no mínimo 6 caracteres"),
-  tipoUsuario: z.string().min(1, "Selecione um tipo de usuário"),
-}).refine((data) => data.senha === data.confirmarSenha, {
-  message: "As senhas não coincidem",
-  path: ["confirmarSenha"],
-});
-
-type RegisterFormData = z.infer<typeof registerSchema>;
+import { FloatingLabelInput } from "@/components/ui/FloatingLabelInput";
+import { FloatingLabelSelect } from "@/components/ui/FloatingLabelSelect";
+import { Button } from "@/components/ui/button";
+import { WaveBackground } from "@/components/ui/WaveBackground";
+import { toast } from "sonner";
 
 const Register = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
-  
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm<RegisterFormData>({
-    resolver: zodResolver(registerSchema),
+  const [formData, setFormData] = useState({
+    nome: "",
+    matricula: "",
+    senha: "",
+    confirmarSenha: "",
+    tipoUsuario: "",
   });
 
-  const onSubmit = async (data: RegisterFormData) => {
-    setIsSubmitting(true);
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      console.log("Dados do cadastro:", data);
-      toast.success("Cadastro realizado com sucesso!");
-      navigate("/dashboard");
-    } catch (error) {
-      toast.error("Erro ao realizar cadastro. Tente novamente.");
-    } finally {
-      setIsSubmitting(false);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!formData.nome || !formData.matricula || !formData.senha || !formData.confirmarSenha || !formData.tipoUsuario) {
+      toast.error("Por favor, preencha todos os campos");
+      return;
     }
+
+    if (formData.senha !== formData.confirmarSenha) {
+      toast.error("As senhas não coincidem");
+      return;
+    }
+
+    if (formData.nome.length < 20) {
+      toast.error("O nome deve ter no mínimo 20 caracteres");
+      return;
+    }
+
+    toast.success("Cadastro realizado com sucesso!");
+    navigate("/");
   };
 
+  const tiposUsuario = [
+    { value: "aluno", label: "Aluno" },
+    { value: "professor", label: "Professor" },
+    { value: "coordenador", label: "Coordenador" },
+    { value: "administrador", label: "Administrador" },
+  ];
+
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <div className="bg-card rounded-2xl border-2 border-primary/20 p-8 shadow-[0_4px_20px_-2px_hsl(220_90%_56%/0.15)] animate-in fade-in-0 zoom-in-95 duration-500">
-          {/* Logo/Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-5xl font-black text-primary mb-3 tracking-tight">
-              AVAL
-            </h1>
-            <h2 className="text-xl font-semibold text-foreground mb-2">
-              Crie sua conta no AVAL
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              Cadastre-se e comece a acompanhar seus atendimentos
-            </p>
-          </div>
+    <>
+      <WaveBackground />
+      <div className="min-h-screen flex items-center justify-center p-4 py-12">
+        <div className="w-full max-w-md">
+          <div className="bg-card rounded-3xl shadow-xl p-8 space-y-6">
+            {/* Logo */}
+            <div className="text-start">
+              <h1 className="text-5xl font-black text-primary mb-6 text-center">AVAL</h1>
+              <h2 className="text-xl font-semibold text-primary  mb-2">
+                Crie sua conta no AVAL
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                Cadastre-se e comece a acompanhar <br /> atendimentos.
+              </p>
+            </div>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            {/* Nome */}
-            <div className="space-y-2">
-              <Label htmlFor="nome" className="text-foreground font-medium">
-                Digite seu nome
-              </Label>
-              <Input
-                id="nome"
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-8 pt-4">
+              <FloatingLabelInput
+                label="Digite seu nome"
                 type="text"
-                placeholder="Seu nome completo"
-                {...register("nome")}
-                className="h-11 transition-all duration-200 focus:border-primary"
+                value={formData.nome}
+                onChange={(e) =>
+                  setFormData({ ...formData, nome: e.target.value })
+                }
               />
-              {errors.nome && (
-                <p className="text-xs text-destructive">{errors.nome.message}</p>
-              )}
-            </div>
 
-            {/* Matrícula */}
-            <div className="space-y-2">
-              <Label htmlFor="matricula" className="text-foreground font-medium">
-                Digite sua matrícula
-              </Label>
-              <Input
-                id="matricula"
+              <FloatingLabelInput
+                label="Digite sua matrícula"
                 type="text"
-                placeholder="Número da matrícula"
-                {...register("matricula")}
-                className="h-11 transition-all duration-200 focus:border-primary"
+                value={formData.matricula}
+                onChange={(e) =>
+                  setFormData({ ...formData, matricula: e.target.value })
+                }
               />
-              {errors.matricula && (
-                <p className="text-xs text-destructive">{errors.matricula.message}</p>
-              )}
-            </div>
 
-            {/* Senha */}
-            <div className="space-y-2">
-              <Label htmlFor="senha" className="text-foreground font-medium">
-                Digite sua senha
-              </Label>
-              <Input
-                id="senha"
+              <FloatingLabelInput
+                label="Digite sua senha"
                 type="password"
-                placeholder="••••••••"
-                {...register("senha")}
-                className="h-11 transition-all duration-200 focus:border-primary"
+                value={formData.senha}
+                onChange={(e) =>
+                  setFormData({ ...formData, senha: e.target.value })
+                }
               />
-              {errors.senha && (
-                <p className="text-xs text-destructive">{errors.senha.message}</p>
-              )}
-            </div>
 
-            {/* Confirmar Senha */}
-            <div className="space-y-2">
-              <Label htmlFor="confirmarSenha" className="text-foreground font-medium">
-                Confirmar senha
-              </Label>
-              <Input
-                id="confirmarSenha"
+              <FloatingLabelInput
+                label="Confirmar senha"
                 type="password"
-                placeholder="••••••••"
-                {...register("confirmarSenha")}
-                className="h-11 transition-all duration-200 focus:border-primary"
+                value={formData.confirmarSenha}
+                onChange={(e) =>
+                  setFormData({ ...formData, confirmarSenha: e.target.value })
+                }
               />
-              {errors.confirmarSenha && (
-                <p className="text-xs text-destructive">
-                  {errors.confirmarSenha.message}
-                </p>
-              )}
-            </div>
 
-            {/* Tipo de Usuário */}
-            <div className="space-y-2">
-              <Label htmlFor="tipoUsuario" className="text-foreground font-medium">
-                Tipo de usuário
-              </Label>
-              <Select
-                onValueChange={(value) => setValue("tipoUsuario", value)}
+              <FloatingLabelSelect
+                label="Tipo de usuário"
+                options={tiposUsuario}
+                value={formData.tipoUsuario}
+                onChange={(e) =>
+                  setFormData({ ...formData, tipoUsuario: e.target.value })
+                }
+              />
+
+        <Link
+  to="/dashboard"
+  className="w-full h-12 flex items-center justify-center text-base font-semibold bg-[#7b9cf5] hover:bg-[#0043FA] text-[#0043FA] hover:text-white border border-[#325fda] rounded-lg shadow-md transition-all duration-200 hover:shadow-lg"
+>
+  Cadastrar
+</Link>
+
+
+            </form>
+
+            {/* Link */}
+            <div className="text-start text-sm pt-2">
+              <Link
+                to="/login"
+                className="text-primary hover:text-primary/80 transition-colors font-medium"
               >
-                <SelectTrigger className="h-11 transition-all duration-200 focus:border-primary">
-                  <SelectValue placeholder="Selecione o tipo" />
-                </SelectTrigger>
-                <SelectContent className="bg-popover">
-                  <SelectItem value="aluno">Aluno</SelectItem>
-                  <SelectItem value="professor">Professor</SelectItem>
-                  <SelectItem value="coordenador">Coordenador</SelectItem>
-                  <SelectItem value="administrativo">Administrativo</SelectItem>
-                </SelectContent>
-              </Select>
-              {errors.tipoUsuario && (
-                <p className="text-xs text-destructive">
-                  {errors.tipoUsuario.message}
-                </p>
-              )}
+                Já possuo uma conta
+              </Link>
             </div>
-
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              className="w-full mt-6"
-              size="lg"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Cadastrando..." : "Cadastrar"}
-            </Button>
-          </form>
-
-          {/* Login Link */}
-          <div className="mt-6 text-center">
-            <Link
-              to="/login"
-              className="text-sm text-primary hover:text-primary/80 font-medium transition-colors duration-200"
-            >
-              Já possui uma conta?
-            </Link>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

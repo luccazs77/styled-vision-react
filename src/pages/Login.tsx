@@ -1,123 +1,94 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
-
-const loginSchema = z.object({
-  matricula: z.string().min(3, "Matrícula inválida").max(50),
-  senha: z.string().min(6, "Senha deve ter no mínimo 6 caracteres").max(100),
-});
-
-type LoginFormData = z.infer<typeof loginSchema>;
+import { FloatingLabelInput } from "@/components/ui/FloatingLabelInput";
+import { Button } from "@/components/ui/button";
+import { WaveBackground } from "@/components/ui/WaveBackground";
+import { toast } from "sonner";
 
 const Login = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
-  
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+  const [formData, setFormData] = useState({
+    matricula: "",
+    senha: "",
   });
 
-  const onSubmit = async (data: LoginFormData) => {
-    setIsSubmitting(true);
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      console.log("Dados do login:", data);
-      toast.success("Login realizado com sucesso!");
-      navigate("/dashboard");
-    } catch (error) {
-      toast.error("Erro ao realizar login. Verifique suas credenciais.");
-    } finally {
-      setIsSubmitting(false);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!formData.matricula || !formData.senha) {
+      toast.error("Por favor, preencha todos os campos");
+      return;
     }
+
+    toast.success("Login realizado com sucesso!");
+    // Aqui você implementaria a lógica de login real
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <div className="bg-card rounded-2xl border-2 border-primary/20 p-8 shadow-[0_4px_20px_-2px_hsl(220_90%_56%/0.15)] animate-in fade-in-0 zoom-in-95 duration-500">
-          {/* Logo/Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-5xl font-black text-primary mb-3 tracking-tight">
-              AVAL
-            </h1>
-            <h2 className="text-xl font-semibold text-foreground mb-2">
-              Acesse sua conta
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              Digite suas credenciais para continuar
-            </p>
-          </div>
+    <>
+      <WaveBackground />
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="w-full max-w-md">
+          <div className="bg-card rounded-3xl shadow-xl p-8 space-y-6">
+            {/* Logo */}
+            <div className="text-start">
+              <h1 className="text-5xl font-black text-primary mb-6 text-center">AVAL</h1>
+              <h2 className="text-xl font-semibold text-primary mb-2">
+                Faça seu login no AVAL
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                Gerencie atendimentos e métricas em <br /> tempo real.
+              </p>
+            </div>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            {/* Matrícula */}
-            <div className="space-y-2">
-              <Label htmlFor="matricula" className="text-foreground font-medium">
-                Matrícula
-              </Label>
-              <Input
-                id="matricula"
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-8 pt-4">
+              <FloatingLabelInput
+                label="Digite sua matrícula"
                 type="text"
-                placeholder="Número da matrícula"
-                {...register("matricula")}
-                className="h-11 transition-all duration-200 focus:border-primary"
+                value={formData.matricula}
+                onChange={(e) =>
+                  setFormData({ ...formData, matricula: e.target.value })
+                }
+          
               />
-              {errors.matricula && (
-                <p className="text-xs text-destructive">{errors.matricula.message}</p>
-              )}
-            </div>
 
-            {/* Senha */}
-            <div className="space-y-2">
-              <Label htmlFor="senha" className="text-foreground font-medium">
-                Senha
-              </Label>
-              <Input
-                id="senha"
+              <FloatingLabelInput
+                label="Digite sua senha"
                 type="password"
-                placeholder="••••••••"
-                {...register("senha")}
-                className="h-11 transition-all duration-200 focus:border-primary"
+                value={formData.senha}
+                onChange={(e) =>
+                  setFormData({ ...formData, senha: e.target.value })
+                }
               />
-              {errors.senha && (
-                <p className="text-xs text-destructive">{errors.senha.message}</p>
-              )}
+
+              <Link
+                to="/dashboard"
+                className="w-full h-12 flex items-center justify-center text-base font-semibold bg-[#7b9cf5] hover:bg-[#0043FA] text-[#0043FA] hover:text-white border border-[#325fda] rounded-lg shadow-md transition-all duration-200 hover:shadow-lg"
+              >
+                Entrar
+              </Link>
+            </form>
+
+            {/* Links */}
+            <div className="flex justify-between items-center text-sm pt-2">
+              <Link
+                to="/register"
+                className="text-primary hover:text-primary/80 transition-colors"
+              >
+                Esqueceu a senha?
+              </Link>
+              <Link
+                to="/register"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Não tem conta? <span className="text-primary font-semibold">Criar agora</span>
+              </Link>
             </div>
-
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              className="w-full mt-6"
-              size="lg"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Entrando..." : "Entrar"}
-            </Button>
-          </form>
-
-          {/* Register Link */}
-          <div className="mt-6 text-center">
-            <Link
-              to="/"
-              className="text-sm text-primary hover:text-primary/80 font-medium transition-colors duration-200"
-            >
-              Criar nova conta
-            </Link>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

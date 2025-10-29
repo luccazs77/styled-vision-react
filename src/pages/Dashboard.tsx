@@ -7,9 +7,9 @@ import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const userName = "vitória";
-  const userFullName = "Vitor Rocha";
-  const userMatricula = "025266";
+  const userName = "Vitória";
+  const userFullName = "Vitória Rocha";
+  const userMatricula = "1-005733";
   const userRole = "Administrador";
 
   const topics = [
@@ -84,20 +84,31 @@ const Dashboard = () => {
         {/* Featured Card */}
         <Card className="mb-6 bg-primary/90 text-primary-foreground border-0 overflow-hidden rounded-2xl">
           <CardContent className="p-5 relative min-h-[180px]">
-            <div className="absolute top-3 left-3 text-[10px] text-primary-foreground/70 font-medium">
-              CEUMA<br />UNIVERSIDADE
+            <div className="absolute -top-2 left-3 w-20 h-20">
+              <img
+                src="/logoCeumaBranco.png"
+                alt="CEUMA Universidade"
+                className="w-full h-full object-contain"
+              />
             </div>
-            <div className="relative z-10 pt-8">
+
+            <div className="relative z-10 pt-8 text-start">
               <h3 className="text-xl font-semibold mb-2 leading-tight text-primary-foreground/95">
                 Centralize<br />seus atendimentos.
               </h3>
-              <p className="text-xs text-primary-foreground/80 max-w-[65%] leading-relaxed">
-                O AVAL centraliza seus atendimentos presenciais e transforma cada feedback em dados que melhoram sua operação em tempo real.
+              <p className="text-[10px] max-w-[75%] leading-relaxed" style={{ color: "#383839" }}>
+                O AVAL centraliza seus atendimentos <br /> presenciais e transforma cada feedback <br /> em dados que melhoram sua operação <br /> em tempo real.
               </p>
+
             </div>
-            <div className="absolute right-2 bottom-2 w-32 h-32">
-              <div className="w-full h-full flex items-end justify-end">
-                <div className="text-6xl">💁‍♀️</div>
+            <div className="absolute right-2 bottom-2 w-40 h-40 top-15">
+              <div className="w-full h-full flex items-end justify-end ">
+                <img
+                src="/Whisk_db7d0faca6288e982ee4123c4712587fdr 1.png"
+                alt="CEUMA Universidade"
+                className="w-full h-full object-contain" 
+                top-20
+              />
               </div>
             </div>
           </CardContent>
