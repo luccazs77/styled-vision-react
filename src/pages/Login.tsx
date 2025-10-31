@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { FloatingLabelInput } from "@/components/ui/FloatingLabelInput";
 import { Button } from "@/components/ui/button";
 import { WaveBackground } from "@/components/ui/WaveBackground";
@@ -14,14 +14,23 @@ const Login = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    const matriculaRegex = /^1-00\d{4,}$/; // começa com 1-00 e tem pelo menos 2 números depois
+
     if (!formData.matricula || !formData.senha) {
       toast.error("Por favor, preencha todos os campos");
       return;
     }
 
+    if (!matriculaRegex.test(formData.matricula)) {
+      toast.error("Matrícula inválida! Use o formato 1-00####");
+      return;
+    }
+
     toast.success("Login realizado com sucesso!");
-    // Aqui você implementaria a lógica de login real
+
+    // ✅ Envia a matrícula para o Dashboard
+    navigate("/dashboard", { state: { matricula: formData.matricula } });
   };
 
   return (
@@ -30,9 +39,10 @@ const Login = () => {
       <div className="min-h-screen flex items-center justify-center p-4">
         <div className="w-full max-w-md">
           <div className="bg-card rounded-3xl shadow-xl p-8 space-y-6">
-            {/* Logo */}
             <div className="text-start">
-              <h1 className="text-5xl font-black text-primary mb-6 text-center">AVAL</h1>
+              <h1 className="text-5xl font-black text-primary mb-6 text-center">
+                AVAL
+              </h1>
               <h2 className="text-xl font-semibold text-primary mb-2">
                 Faça seu login no AVAL
               </h2>
@@ -41,7 +51,6 @@ const Login = () => {
               </p>
             </div>
 
-            {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-8 pt-4">
               <FloatingLabelInput
                 label="Digite sua matrícula"
@@ -50,7 +59,6 @@ const Login = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, matricula: e.target.value })
                 }
-          
               />
 
               <FloatingLabelInput
@@ -62,15 +70,14 @@ const Login = () => {
                 }
               />
 
-              <Link
-                to="/dashboard"
-                className="w-full h-12 flex items-center justify-center text-base font-semibold bg-[#7b9cf5] hover:bg-[#0043FA] text-[#0043FA] hover:text-white border border-[#325fda] rounded-lg shadow-md transition-all duration-200 hover:shadow-lg"
+              <Button
+                type="submit"
+                className="w-full h-12 text-base font-semibold bg-[#7b9cf5] hover:bg-[#0043FA] text-[#0043FA] hover:text-white border border-[#325fda] rounded-lg shadow-md transition-all duration-200 hover:shadow-lg"
               >
                 Entrar
-              </Link>
+              </Button>
             </form>
 
-            {/* Links */}
             <div className="flex justify-between items-center text-sm pt-2">
               <Link
                 to="/register"
@@ -82,7 +89,8 @@ const Login = () => {
                 to="/register"
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
-                Não tem conta? <span className="text-primary font-semibold">Criar agora</span>
+                Não tem conta?{" "}
+                <span className="text-primary font-semibold">Criar agora</span>
               </Link>
             </div>
           </div>

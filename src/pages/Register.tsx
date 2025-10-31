@@ -19,7 +19,13 @@ const Register = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.nome || !formData.matricula || !formData.senha || !formData.confirmarSenha || !formData.tipoUsuario) {
+    if (
+      !formData.nome ||
+      !formData.matricula ||
+      !formData.senha ||
+      !formData.confirmarSenha ||
+      !formData.tipoUsuario
+    ) {
       toast.error("Por favor, preencha todos os campos");
       return;
     }
@@ -29,13 +35,20 @@ const Register = () => {
       return;
     }
 
-    if (formData.nome.length < 20) {
+    if (formData.nome.length < 15) {
       toast.error("O nome deve ter no mínimo 20 caracteres");
       return;
     }
 
+    // 🔹 Validação da matrícula no formato 1-00XXXX
+    const matriculaRegex = /^1-00\d{4}$/;
+    if (!matriculaRegex.test(formData.matricula)) {
+      toast.error("A matrícula deve estar no formato 1-00XXXX (ex: 1-001234)");
+      return;
+    }
+
     toast.success("Cadastro realizado com sucesso!");
-    navigate("/");
+    navigate("/"); // redireciona para a tela de login
   };
 
   const tiposUsuario = [
@@ -53,8 +66,10 @@ const Register = () => {
           <div className="bg-card rounded-3xl shadow-xl p-8 space-y-6">
             {/* Logo */}
             <div className="text-start">
-              <h1 className="text-5xl font-black text-primary mb-6 text-center">AVAL</h1>
-              <h2 className="text-xl font-semibold text-primary  mb-2">
+              <h1 className="text-5xl font-black text-primary mb-6 text-center">
+                AVAL
+              </h1>
+              <h2 className="text-xl font-semibold text-primary mb-2">
                 Crie sua conta no AVAL
               </h2>
               <p className="text-sm text-muted-foreground">
@@ -109,14 +124,12 @@ const Register = () => {
                 }
               />
 
-        <Link
-  to="/dashboard"
-  className="w-full h-12 flex items-center justify-center text-base font-semibold bg-[#7b9cf5] hover:bg-[#0043FA] text-[#0043FA] hover:text-white border border-[#325fda] rounded-lg shadow-md transition-all duration-200 hover:shadow-lg"
->
-  Cadastrar
-</Link>
-
-
+              <Button
+                type="submit"
+                className="w-full h-12 text-base font-semibold bg-[#7b9cf5] hover:bg-[#0043FA] text-[#0043FA] hover:text-white border border-[#325fda] rounded-lg shadow-md transition-all duration-200 hover:shadow-lg"
+              >
+                Cadastrar
+              </Button>
             </form>
 
             {/* Link */}

@@ -22,7 +22,7 @@ const FloatingLabelInput = forwardRef<HTMLInputElement, FloatingLabelInputProps>
         {(isFocused || hasValue || props.value) ? (
           <fieldset
             className={cn(
-              "relative border-2 rounded-lg transition-all duration-200 border-primary"
+              "relative border-2 rounded-lg transition-all duration-900 border-primary"
             )}
           >
             <legend className="ml-3 px-1 text-xs text-primary">

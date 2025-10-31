@@ -1,7 +1,8 @@
+import Login from "./Login";
 import Register from "./Register";
 
 const Index = () => {
-  return <Register />;
+  return <Login />;
 };
 
 export default Index;
